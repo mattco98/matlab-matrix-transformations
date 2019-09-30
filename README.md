@@ -4,7 +4,7 @@ This library provides and easy way to create SO(3) and SE(3) matrix transformati
 
 ## Examples
 
-### Compute SO(3) rotation matrices
+#### Compute SO(3) rotation matrices
 
 ```matlab
 >> Rotation.glob().x(1.1 * pi).y(3 * pi / 2).z(1.34).matrix()
@@ -32,7 +32,7 @@ ans =
 
 The `xd`, `yd`, and `zd` functions behave exactly as their respective radian functions do with regards to local and global rotations.
 
-### Compute axes angles
+#### Compute axes angles
 
 With the same rotations in the examples above:
 
@@ -51,7 +51,7 @@ theta =
     2.0470
 ```
 
-### Local rotations
+#### Local rotations
 
 Compute local rotations:
 
@@ -65,7 +65,7 @@ ans =
    -0.5184    0.8551    0.0000
 ```
 
-### Combine local and global rotations
+#### Combine local and global rotations
 
 Local and global rotations can be calculated in any arbitrary order
 
@@ -88,7 +88,7 @@ When combining local and global rotations, the order you call the functions is t
 
 Normally you would have to reorder these operations in order to compute the actual transformation matrix, but this is handled automatically by the library.
 
-### Translation
+#### Translation
 
 Compute SE(3) translation matrices
 
@@ -103,11 +103,11 @@ ans =
      0     0     0     1
 ```
 
-Because Translations are significantly easier than rotations, the `Translation` and `TranslationBuilder` interfaces are a bit simpler. Most notably, you can access the `TranslationBuilder` through the `.builder()` method of `Translation`. `Translation` does provide the `.loc()` and `.glob()` methods, but because local and global translations are equivalent with no translation, they are only there to maintain consistency with `Rotation`.
+Because Translations are significantly easier than rotations, the `Translation` and `TranslationBuilder` interfaces are a bit simpler. Most notably, you can access the `TranslationBuilder` through the `.builder()` method of `Translation`. `Translation` does provide the `.loc()` and `.glob()` methods, but because local and global translations are equivalent with no rotation, they are only there to maintain consistency with `Rotation`.
 
 Additionally, `.matrix()` is the only method that returns a result from a `TranslationBuilder` instance.
 
-### Rotation and Translation
+#### Rotation and Translation
 
 To facilitate the mixing of rotations and translations, the `RotationBuilder` class has a `.translate()` method which passes the current transformation matrix to an instance of `TranslationBuilder` and returns it. The same is true about the `.rotate()` method of `TranslationBuilder`
 
@@ -160,19 +160,18 @@ ans =
 
 As a sidenote, the pure rotation matrix can be obtained from an SE(3) transformation matrix by calling `.matrix3()` instead of `.matrix()`.
 
-### Multiple transformations for one frame
+#### Multiple transformations for one frame
 
-All of the builder methods take a matrix as arguments, allowing easy calculation of multiple transformation matrices for the same reference frame. For completeness, the list of builder methods are the following:
+All of the builder methods take a matrix as an argument, allowing easy calculation of multiple transformation matrices for the same reference frame. For completeness, the list of builder methods are the following:
 
 - `Transformation.rotate(matrix)`
 - `Transformation.translate(matrix)`
 - `Rotation.loc(matrix)`
 - `Rotation.glob(matrix)`
-- `Translation.builder(matrix)`
-- `Translation.loc(matrix)` & `Translation.glob(matrix)`
+- `Translation.builder(matrix)` & `Translation.loc(matrix)` & `Translation.glob(matrix)`
 
 You can store the builder from any of these methods and use it to operate on the same `matrix`.
 
-### Automatic application of transformation matrices
+#### Automatic application of transformation matrices
 
-Both `matrix` methods (i.e. `RotationBuilder.matrix()` and `TranslationBuilder.matrix()`) take a `target` argument which, if provided, will automatically be applied to the transformation matrix. The result of the multiplication will be returned.
+The matrix methods (i.e. `RotationBuilder.matrix()`, `RotationBuilder.matrix3()`, and `TranslationBuilder.matrix()`) take a `target` argument which, if provided, will automatically be applied to the transformation matrix. The result of the multiplication will be returned.
