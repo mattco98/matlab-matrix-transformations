@@ -1,6 +1,6 @@
 # matlab-matrix-transformation
 
-This library provides and easy way to create SO(3) and SE(3) matrix transformations using a clean and consise API. Supported transformations include translation and rotation, both local and global, in any arbitrary order.
+This library provides and easy way to create SO(3) and SE(3) matrix transformations using a clean and concise API. Supported transformations include translation and rotation, both local and global, in any arbitrary order.
 
 ## Examples
 
