@@ -43,6 +43,18 @@ classdef TransformationBuilder
             ret = obj;
         end
         
+        function ret = scale(obj)
+            % translate Sets the mode to SCALE
+            %
+            %   Any transformations specified will be interpreted as
+            %   scaling until another mode changing method is called.
+            %
+            % Returns: The object for method chaining.
+            
+            obj.mode = Transformation.SCALE;
+            ret = obj;
+        end
+        
         function ret = loc(obj)
             % loc Sets the reference frame to local mode
             %
@@ -81,6 +93,8 @@ classdef TransformationBuilder
                     ret = obj.apply_transform(Translation.x(n));
                 case Transformation.ROTATE
                     ret = obj.apply_transform(Rotation.x(n));
+                case Transformation.SCALE
+                    ret = obj.apply_transform(Scaling.x(n));
                 otherwise
                     error('Transformation mode is not set. Set a mode with either ".rotate()" or ".translate()"');
             end
@@ -121,6 +135,8 @@ classdef TransformationBuilder
                     ret = obj.apply_transform(Translation.y(n));
                 case Transformation.ROTATE
                     ret = obj.apply_transform(Rotation.y(n));
+                case Transformation.SCALE
+                    ret = obj.apply_transform(Scaling.y(n));
                 otherwise
                     error('Transformation mode is not set. Set a mode with either ".rotate()" or ".translate()"');
             end
@@ -161,6 +177,8 @@ classdef TransformationBuilder
                     ret = obj.apply_transform(Translation.z(n));
                 case Transformation.ROTATE
                     ret = obj.apply_transform(Rotation.z(n));
+                case Transformation.SCALE
+                    ret = obj.apply_transform(Scaling.z(n));
                 otherwise
                     error('Transformation mode is not set. Set a mode with either ".rotate()" or ".translate()"');
             end

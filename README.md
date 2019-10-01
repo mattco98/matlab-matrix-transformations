@@ -1,6 +1,6 @@
 # matlab-matrix-transformation
 
-This library provides and easy way to create SO(3) and SE(3) matrix transformations using a clean and concise API. Supported transformations include translation and rotation, both local and global, in any arbitrary order.
+This library provides and easy way to create SO(3) and SE(3) matrix transformations using a clean and concise API. Supported transformations include translation, rotation and scaling - both local and global, in any arbitrary order.
 
 The library provides most functionality through the `Transformation` class, which contains the methods for doing the various supported transformations. `Transformation` methods return `TransformationBuilder` instances, a builder-style class for creating arbitrarily long chains of transformations.
 
@@ -158,6 +158,10 @@ ans =
 ```
 
 As a sidenote, the pure rotation matrix can be obtained from an SE(3) transformation matrix by calling `.matrix3()` instead of `.matrix()`.
+
+#### Scaling
+
+Set the `TransformationBuilder` to scaling mode with `TransformationBuilder.scale()`. Works the same way as the other transformations.
 
 #### Multiple transformations for one frame
 

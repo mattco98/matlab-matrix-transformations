@@ -6,6 +6,7 @@ classdef Transformation
     enumeration
         TRANSLATE
         ROTATE
+        SCALE
         NONE
     end
     
@@ -29,7 +30,7 @@ classdef Transformation
             % translate Instantiates a TransformationBuilder object
             %   Creates a new TransformationBuilder object with the 
             %   provided matrix and sets it to TRANSLATE mode. If no matrix
-            %  is specified, eye(4) is used.
+            %   is specified, eye(4) is used.
             %
             % Returns: A TransformationBuilder instance
             
@@ -38,6 +39,21 @@ classdef Transformation
             end
             
             ret = TransformationBuilder(mat, true, Transformation.TRANSLATE);
+        end
+        
+        function ret = scale(mat)
+            % scale Instantiates a TransformationBuilder object
+            %   Creates a new TransformationBuilder object with the 
+            %   provided matrix and sets it to SCALE mode. If no matrix is 
+            %  specified, eye(4) is used.
+            %
+            % Returns: A TransformationBuilder instance
+            
+            if nargin == 0
+                mat = eye(4);
+            end
+            
+            ret = TransformationBuilder(mat, true, Transformation.SCALE);
         end
     end
 end
