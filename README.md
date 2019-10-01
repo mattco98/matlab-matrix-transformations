@@ -2,42 +2,48 @@
 
 This library provides and easy way to create SO(3) and SE(3) matrix transformations using a clean and concise API. Supported transformations include translation and rotation, both local and global, in any arbitrary order.
 
+The library provides most functionality through the `Transformation` class, which contains the methods for doing the various supported transformations. `Transformation` methods return `TransformationBuilder` instances, a builder-style class for creating arbitrarily long chains of transformations.
+
 ## Examples
 
-#### Compute SO(3) rotation matrices
+#### Compute SE(3) rotation matrices
+
+In order to calculate a rotation, we start by calling `Translation.rotate()`, followed by the particular rotations.
 
 ```matlab
->> Rotation.glob().x(1.1 * pi).y(3 * pi / 2).z(1.34).matrix()
+>> Transformation.rotate().glob().x(1.1 * pi).y(3 * pi / 2).z(1.34).matrix()
 
 ans =
 
-   -0.0000    0.9965   -0.0833
-   -0.0000    0.0833    0.9965
-    1.0000    0.0000    0.0000
+   -0.0000    0.9965   -0.0833         0
+   -0.0000    0.0833    0.9965         0
+    1.0000    0.0000    0.0000         0
+         0         0         0    1.0000
 ```
 
-The call to `.glob()` tells the `Rotation` object to interpret all future calls as global.
+The call to `.glob()` sets the reference mode to global, meaning all three of the above rotations are relative to the global frame.
 
 In degrees:
 
 ```matlab
->> Rotation.glob().xd(198).yd(270).zd(76.7763).matrix()
+>> Transformation.rotate().glob().xd(198).yd(270).zd(76.7763).matrix()
 
 ans =
 
-   -0.0000    0.9965   -0.0833
-   -0.0000    0.0833    0.9965
-    1.0000    0.0000    0.0000
+   -0.0000    0.9965   -0.0833         0
+   -0.0000    0.0833    0.9965         0
+    1.0000    0.0000    0.0000         0
+         0         0         0    1.0000
 ```
 
-The `xd`, `yd`, and `zd` functions behave exactly as their respective radian functions do with regards to local and global rotations.
+The `xd`, `yd`, and `zd` functions behave exactly as their respective radian functions do with regards to local and global rotations, however you must be in rotation mode to use these functions, otherwise an error will be thrown.
 
 #### Compute axes angles
 
 With the same rotations in the examples above:
 
 ```matlab
->> [k, theta] = Rotation.glob().xd(198).yd(270).zd(76.7763).axis()
+>> [k, theta] = Transformation.rotate().glob().xd(198).yd(270).zd(76.7763).axis()
 
 k =
 
@@ -56,13 +62,14 @@ theta =
 Compute local rotations:
 
 ```matlab
->> Rotation.loc().xd(198).yd(270).zd(76.7763).matrix()
+>> Transformation.rotate().loc().xd(198).yd(270).zd(76.7763).matrix()
 
 ans =
 
-   -0.0000    0.0000   -1.0000
-   -0.8551   -0.5184   -0.0000
-   -0.5184    0.8551    0.0000
+   -0.0000    0.0000   -1.0000         0
+   -0.8551   -0.5184   -0.0000         0
+   -0.5184    0.8551    0.0000         0
+         0         0         0    1.0000
 ```
 
 #### Combine local and global rotations
@@ -70,13 +77,14 @@ ans =
 Local and global rotations can be calculated in any arbitrary order
 
 ```matlab
->> Rotation.loc().xd(30).yd(12).glob().zd(180).loc().x(pi / 2).matrix()
+>> Transformation.rotate().loc().xd(30).yd(12).glob().zd(180).loc().x(pi / 2).matrix()
 
 ans =
 
-   -0.9781   -0.2079    0.0000
-   -0.1040    0.4891    0.8660
-   -0.1801    0.8471   -0.5000
+   -0.9781   -0.2079    0.0000         0
+   -0.1040    0.4891    0.8660         0
+   -0.1801    0.8471   -0.5000         0
+         0         0         0    1.0000
 ```
 
 When combining local and global rotations, the order you call the functions is the order they are applied in. So the above matrix represents the following rotations:
@@ -93,29 +101,20 @@ Normally you would have to reorder these operations in order to compute the actu
 Compute SE(3) translation matrices
 
 ```matlab
->> Translation.builder().x(12).y(-2).z(87).matrix()
+>> Transformation.translate().x(12).y(-2).z(87).matrix()
 
 ans =
 
      1     0     0    12
      0     1     0    -2
-     0     1     0    87
+     0     0     1    87
      0     0     0     1
 ```
 
-Because Translations are significantly easier than rotations, the `Translation` and `TranslationBuilder` interfaces are a bit simpler. Most notably, you can access the `TranslationBuilder` through the `.builder()` method of `Translation`. `Translation` does provide the `.loc()` and `.glob()` methods, but because local and global translations are equivalent with no rotation, they are only there to maintain consistency with `Rotation`.
-
-Additionally, `.matrix()` is the only method that returns a result from a `TranslationBuilder` instance.
 
 #### Rotation and Translation
 
-To facilitate the mixing of rotations and translations, the `RotationBuilder` class has a `.translate()` method which passes the current transformation matrix to an instance of `TranslationBuilder` and returns it. The same is true about the `.rotate()` method of `TranslationBuilder`
-
-In order to smoothly use both rotations and translations, it is recommended to use the `Transformation` class. This is because using the methods from `Rotation`, such as `Rotation.loc()`, return SO(3) matrices. These matrices do not have a translation component, and if you attempt to call `.translate()` on a builder created by the `Rotation` class, it will throw an error.
-
-The `Transformation` class creates SE(3) matrices, which contain both rotations and translations. Rotations and translations can be combined in any order, and within a rotation or translation, local and global frames can be used interchangeably.
-
-Here is a simple example:
+Rotations and Translations can be combined arbitrarily and in either reference frame.
 
 ```matlab
 >> Transformation.rotate().z(pi).translate().x(-10).matrix()
@@ -143,7 +142,7 @@ ans =
          0         0         0    1.0000
 ```
 
-As expected, the transformation matrices are identical. Note that the call to `.glob()`, which was applied to the `RotationBuilder` instance, carried through into the `TranslationBuilder`. The local/global reference frame will always carry through `.rotate()` and `.translate()` calls.
+As expected, the transformation matrices are identical. Note that the local/global reference frame will always carry through `.rotate()` and `.translate()` calls, meaning there is no need to re-call `.glob()` after the call to `.translate()`.
 
 And of course, any of these functions can be combined with each other to perform some quite lengthy transformations
 
@@ -152,8 +151,8 @@ And of course, any of these functions can be combined with each other to perform
 
 ans =
 
-    0.0000   -0.0000    1.0000   10.0000
-    1.0000    0.0000   -0.0000    0.0000
+    0.0000   -0.0000    1.0000    0.0000
+    1.0000    0.0000   -0.0000   10.0000
          0    1.0000    0.0000   12.0000
          0         0         0    1.0000
 ```

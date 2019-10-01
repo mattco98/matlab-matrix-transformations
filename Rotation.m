@@ -1,177 +1,80 @@
 classdef Rotation
-    % Rotation Used to calculate rotation (SO(3)/SE(3)) matrices
+    % Rotation Used to calculate rotation (SE(3)) matrices
     %
-    % Calculates rotation matrices in 3-space in either locale or global
-    % coordinate frame. Contains useful static methods for calculating
-    % single rotation matrices, as well as methods for easy access to the
-    % RotationBuilder class.
+    %   A collection of static methods to calculate SE(3) rotation matrices
+    %   given an angle in radians or degrees, as well as some utility 
+    %   methods for dealing with axis angles.
     
     methods(Static)
-        function obj = loc(mat)
-            % loc Returns a rotation builder in local frame mode
-            %
-            %   Returns an instance of RotationBuilder with is_local =
-            %   true.
-            %
-            % Parameters:
-            %   mat - A square matrix. If the matrix is of length 3, it
-            %         represents an SO(3) matrix. If the matrix is of
-            %         length 4, it represents an SE(3) matrix. If no matrix
-            %         is supplies, eye(3) is used as a default.
-            % 
-            % Returns: A RotationBuilder instance
-            
-            if nargin == 0
-                mat = eye(3);
-            elseif length(mat) ~= length(mat(1, :)) || (length(mat) ~= 3 && length(mat) ~= 4)
-                error('Matrix must be a 3x3 or 4x4 matrix');
-            end
-            
-            obj = RotationBuilder(mat, true);
-        end
-        
-        function obj = glob(mat)
-            % glob Returns a rotation builder in global frame mode
-            %
-            %   Returns an instance of RotationBuilder with is_local =
-            %   false.
-            %
-            % Parameters:
-            %   mat - A square matrix. If the matrix is of length 3, it
-            %         represents an SO(3) matrix. If the matrix is of
-            %         length 4, it represents an SE(3) matrix. If no matrix
-            %         is supplies, eye(3) is used as a default.
-            % 
-            % Returns: A RotationBuilder instance
-            
-            if nargin == 0
-                mat = eye(3);
-            elseif length(mat) ~= length(mat(1, :)) || (length(mat) ~= 3 && length(mat) ~= 4)
-                error('Matrix must be a 3x3 or 4x4 matrix');
-            end
-            
-            obj = RotationBuilder(mat, false);
-        end
-        
-        function mat = x(angle, dim)
+        function mat = x(angle)
             % x Returns an x rotation matrix
             %
-            %   Calculates a rotation matrix given the angle and dimension
+            %   Calculates a rotation matrix given the angle in radians
             %
             % Parameters:
             %   angle - The angle in radians to rotate about the x axis
-            %   dim   - The dimensions of the returns matrix. Must be 3
-            %           (for an SO(3) matrix) or 4 (for an SE(3) matrix)
             %
-            % Returns: A rotation matrix with the specified parameters
+            % Returns: A rotation matrix with the specified angle
             %
             % See XD
             
-            if nargin == 1
-                dim = 3;
-            elseif dim ~= 3 && dim ~= 4
-                error('dim must be 3 or 4');
-            end
-            
-            if dim == 3
-                mat = [
-                    1 0           0
-                    0 cos(angle) -sin(angle)
-                    0 sin(angle)  cos(angle)
-                ];
-            elseif dim == 4
-                mat = [
-                    1 0           0           0
-                    0 cos(angle) -sin(angle)  0
-                    0 sin(angle)  cos(angle)  0
-                    0 0           0           1
-                ];
-            end
+            mat = [
+                1 0           0           0
+                0 cos(angle) -sin(angle)  0
+                0 sin(angle)  cos(angle)  0
+                0 0           0           1
+            ];
         end
         
-        function mat = y(angle, dim)
-            % y Returns a y rotation matrix
+        function mat = y(angle)
+            % y Returns an y rotation matrix
             %
-            %   Calculates a rotation matrix given the angle and dimension
+            %   Calculates a rotation matrix given the angle in radians
             %
             % Parameters:
             %   angle - The angle in radians to rotate about the y axis
-            %   dim   - The dimensions of the returns matrix. Must be 3
-            %           (for an SO(3) matrix) or 4 (for an SE(3) matrix)
             %
-            % Returns: A rotation matrix with the specified parameters
+            % Returns: A rotation matrix with the specified angle
             %
             % See YD
             
-            if nargin == 1
-                dim = 3;
-            elseif dim ~= 3 && dim ~= 4
-                error('dim must be 3 or 4');
-            end
-            
-            if dim == 3
-                mat = [
-                     cos(angle)  0 sin(angle)
-                     0           1 0
-                    -sin(angle)  0 cos(angle)
-                ];
-            elseif dim == 4
-                mat = [
-                    cos(angle)  0 sin(angle) 0
-                    0           1 0          0
-                    -sin(angle) 0 cos(angle) 0
-                    0           0 0          1
-                ];
-            end
+            mat = [
+                cos(angle)  0 sin(angle) 0
+                0           1 0          0
+                -sin(angle) 0 cos(angle) 0
+                0           0 0          1
+            ];
         end
         
-        function mat = z(angle, dim)
-            % x Returns a z rotation matrix
+        function mat = z(angle)
+            % z Returns an z rotation matrix
             %
-            %   Calculates a rotation matrix given the angle and dimension
+            %   Calculates a rotation matrix given the angle in radians
             %
             % Parameters:
             %   angle - The angle in radians to rotate about the z axis
-            %   dim   - The dimensions of the returns matrix. Must be 3
-            %           (for an SO(3) matrix) or 4 (for an SE(3) matrix)
             %
-            % Returns: A rotation matrix with the specified parameters
+            % Returns: A rotation matrix with the specified angle
             %
             % See ZD
             
-            if nargin == 1
-                dim = 3;
-            elseif dim ~= 3 && dim ~= 4
-                error('dim must be 3 or 4');
-            end
-            
-            if dim == 3
-                mat = [
-                    cos(angle) -sin(angle)  0
-                    sin(angle)  cos(angle)  0
-                    0           0           1
-                ];
-            elseif dim == 4
-                mat = [
-                    cos(angle) -sin(angle)  0 0
-                    sin(angle)  cos(angle)  0 0
-                    0           0           1 0
-                    0           0           0 1
-                ];
-            end
+            mat = [
+                cos(angle) -sin(angle)  0 0
+                sin(angle)  cos(angle)  0 0
+                0           0           1 0
+                0           0           0 1
+            ];
         end
         
         function mat = xd(angle)
-            % xd Returns an x rotation matrix
+            % x Returns an x rotation matrix
             %
-            %   Calculates a rotation matrix given the angle and dimension
+            %   Calculates a rotation matrix given the angle in degrees
             %
             % Parameters:
             %   angle - The angle in degrees to rotate about the x axis
-            %   dim   - The dimensions of the returns matrix. Must be 3
-            %           (for an SO(3) matrix) or 4 (for an SE(3) matrix)
             %
-            % Returns: A rotation matrix with the specified parameters
+            % Returns: A rotation matrix with the specified angle
             %
             % See X
             
@@ -179,16 +82,14 @@ classdef Rotation
         end
         
         function mat = yd(angle)
-            % yd Returns a y rotation matrix
+            % y Returns an y rotation matrix
             %
-            %   Calculates a rotation matrix given the angle and dimension
+            %   Calculates a rotation matrix given the angle in degrees
             %
             % Parameters:
             %   angle - The angle in degrees to rotate about the y axis
-            %   dim   - The dimensions of the returns matrix. Must be 3
-            %           (for an SO(3) matrix) or 4 (for an SE(3) matrix)
             %
-            % Returns: A rotation matrix with the specified parameters
+            % Returns: A rotation matrix with the specified angle
             %
             % See Y
             
@@ -196,16 +97,14 @@ classdef Rotation
         end
         
         function mat = zd(angle)
-            % zd Returns a z rotation matrix
+            % z Returns an z rotation matrix
             %
-            %   Calculates a rotation matrix given the angle and dimension
+            %   Calculates a rotation matrix given the angle in degrees
             %
             % Parameters:
             %   angle - The angle in degrees to rotate about the z axis
-            %   dim   - The dimensions of the returns matrix. Must be 3
-            %           (for an SO(3) matrix) or 4 (for an SE(3) matrix)
             %
-            % Returns: A rotation matrix with the specified parameters
+            % Returns: A rotation matrix with the specified angle
             %
             % See Z
             
