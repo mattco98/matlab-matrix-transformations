@@ -31,6 +31,13 @@ classdef TransformationBuilder
             ret = obj;
         end
         
+        function ret = r(obj)
+            % r Shorthand for .rotate()
+            % See ROTATE
+            ret = obj.rotate();
+        end
+            
+        
         function ret = translate(obj)
             % translate Sets the mode to TRANSLATE
             %
@@ -41,6 +48,12 @@ classdef TransformationBuilder
             
             obj.mode = Transformation.TRANSLATE;
             ret = obj;
+        end
+        
+        function ret = t(obj)
+            % t Shorthand for .translate()
+            % See TRANSLATE
+            ret = obj.translate();
         end
         
         function ret = scale(obj)
@@ -55,6 +68,12 @@ classdef TransformationBuilder
             ret = obj;
         end
         
+        function ret = s(obj)
+            % s Shorthand for .scale()
+            % See SCALE
+            ret = obj.scale();
+        end
+        
         function ret = loc(obj)
             % loc Sets the reference frame to local mode
             %
@@ -66,6 +85,12 @@ classdef TransformationBuilder
             ret = obj;
         end
         
+        function ret = l(obj)
+            % l Shorthand for .loc()
+            % see LOC
+            ret = obj.loc();
+        end
+        
         function ret = glob(obj)
             % glob Sets the reference frame to global mode
             %
@@ -75,6 +100,12 @@ classdef TransformationBuilder
             % Returns: The object for method chaining.
             obj.is_local = false;
             ret = obj;
+        end
+        
+        function ret = g(obj)
+            % g Shorthand for .glob()
+            % See GLOB
+            ret = obj.glob();
         end
         
         function ret = x(obj, n)
@@ -227,6 +258,17 @@ classdef TransformationBuilder
             ret = obj.mat * target;
         end
         
+        function ret = m(obj, target)
+            % m Shorthand for .matrix()
+            % See MATRIX
+            
+            if nargin == 1
+                target = eye(4);
+            end
+            
+            ret = obj.matrix(target);
+        end
+        
         function ret = matrix3(obj, target)
             % matrix3 Calculates the pure rotation matrix
             %
@@ -246,6 +288,17 @@ classdef TransformationBuilder
             end
             
             ret = obj.mat(1:3, 1:3) * target;
+        end
+        
+        function ret = m3(obj, target)
+            % m3 Shorthand for .matrix3()
+            % See M3
+            
+            if nargin == 1
+                target = eye(3);
+            end
+            
+            ret = obj.matrix3(target);
         end
         
         function [k, theta] = axis(obj)

@@ -26,6 +26,17 @@ classdef Transformation
             ret = TransformationBuilder(mat, true, Transformation.ROTATE);
         end
         
+        function ret = r(mat)
+            % r Shorthand for .rotate()
+            % See ROTATE
+            
+            if nargin == 0
+                mat = eye(4);
+            end
+            
+            ret = Transformation.rotate(mat);
+        end
+        
         function ret = translate(mat)
             % translate Instantiates a TransformationBuilder object
             %   Creates a new TransformationBuilder object with the 
@@ -41,6 +52,17 @@ classdef Transformation
             ret = TransformationBuilder(mat, true, Transformation.TRANSLATE);
         end
         
+        function ret = t(mat)
+            % t Shorthand for .translate()
+            % See TRANSLATE
+            
+            if nargin == 0
+                mat = eye(4);
+            end
+            
+            ret = Transformation.translate(mat);
+        end
+        
         function ret = scale(mat)
             % scale Instantiates a TransformationBuilder object
             %   Creates a new TransformationBuilder object with the 
@@ -54,6 +76,17 @@ classdef Transformation
             end
             
             ret = TransformationBuilder(mat, true, Transformation.SCALE);
+        end
+        
+        function ret = s(mat)
+            % s Shorthand for .scale()
+            % See SCALE
+            
+            if nargin == 0
+                mat = eye(4);
+            end
+            
+            ret = Transformation.scale(mat);
         end
     end
 end
