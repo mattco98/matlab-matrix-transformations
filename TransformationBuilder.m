@@ -354,7 +354,19 @@ classdef TransformationBuilder
             %             x axis.
             %
             % Returns: A TransformationBuilder instance
-            ret = obj.r().z(theta).t().z(d).x(a).r().x(alpha);
+            
+            ret = obj.r().loc().z(theta).t().z(d).x(a).r().x(alpha);
+        end
+        
+        function ret = dhd(obj, theta, d, a, alpha)
+            % dhd Calculates Denavit-Hartenberg transformations
+            %
+            %   Like the .dh() method, except it takes theta and alpha in
+            %   degrees instead of radians.
+            %
+            % See DH
+            
+            ret = obj.dh(theta * pi / 180, d, a, alpha * pi / 180);
         end
     end
     
