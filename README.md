@@ -191,9 +191,8 @@ All of the builder methods take a matrix as an argument, allowing easy calculati
 
 - `Transformation.rotate(matrix)`
 - `Transformation.translate(matrix)`
-- `Rotation.loc(matrix)`
-- `Rotation.glob(matrix)`
-- `Translation.builder(matrix)` & `Translation.loc(matrix)` & `Translation.glob(matrix)`
+- `Transformation.scale(matrix)`
+- `Transformation.builder(matrix)`
 
 You can store the builder from any of these methods and use it to operate on the same `matrix`.
 
