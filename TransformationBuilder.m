@@ -341,6 +341,21 @@ classdef TransformationBuilder
             k = kT;
             theta = thetaT * 180 / pi;
         end
+        
+        function ret = dh(obj, theta, d, a, alpha)
+            % dh Calculates Denavit-Hartenberg transformations
+            %
+            % Parameters:
+            %     theta - The amount, in radians, to rotate about the local
+            %             z axis.
+            %     d     - The distance to translate along the local z axis.
+            %     a     - The distance to translate along the local x axis.
+            %     alpha - The amount, in radians, to rotate about the local
+            %             x axis.
+            %
+            % Returns: A TransformationBuilder instance
+            ret = obj.r().z(theta).t().z(d).x(a).r().x(alpha);
+        end
     end
     
     methods(Access=private)

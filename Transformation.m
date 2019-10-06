@@ -17,7 +17,11 @@ classdef Transformation
             %   provided matrix and sets it to ROTATE mode. If no matrix is 
             %   specified, eye(4) is used.
             %
-            % Returns: A TransformationBuilder instance
+            % Parameters:
+            %     mat: Optional matrix passed to the TransformationBuilder.
+            %          Defaults to eye(4).
+            %
+            % Returns: A TransformationBuilder instance.
             
             if nargin == 0
                 mat = eye(4);
@@ -43,7 +47,11 @@ classdef Transformation
             %   provided matrix and sets it to TRANSLATE mode. If no matrix
             %   is specified, eye(4) is used.
             %
-            % Returns: A TransformationBuilder instance
+            % Parameters:
+            %     mat: Optional matrix passed to the TransformationBuilder.
+            %          Defaults to eye(4).
+            %
+            % Returns: A TransformationBuilder instance.
             
             if nargin == 0
                 mat = eye(4);
@@ -69,7 +77,11 @@ classdef Transformation
             %   provided matrix and sets it to SCALE mode. If no matrix is 
             %  specified, eye(4) is used.
             %
-            % Returns: A TransformationBuilder instance
+            % Parameters:
+            %     mat: Optional matrix passed to the TransformationBuilder.
+            %          Defaults to eye(4).
+            %
+            % Returns: A TransformationBuilder instance.
             
             if nargin == 0
                 mat = eye(4);
@@ -87,6 +99,37 @@ classdef Transformation
             end
             
             ret = Transformation.scale(mat);
+        end
+        
+        function ret = builder(mat)
+            % builder Creates and returns a TransformationBuilder instance
+            %
+            %   Useful when you don't necessarily want or need the builder
+            %   in a specific transformation mode, such as when you want DH
+            %   matrices. Sets the mode to Transformation.NONE.
+            %
+            % Parameters:
+            %     mat: Optional matrix passed to the TransformationBuilder.
+            %          Defaults to eye(4).
+            %
+            % Returns: A TransformationBuilder instance.
+            
+            if nargin == 0
+                mat = eye(4);
+            end
+            
+            ret = TransformationBuilder(mat, true, Transformation.NONE);
+        end
+        
+        function ret = b(mat)
+            % b Shorthand for .builder()
+            % See BUILDER
+            
+            if nargin == 0
+                mat = eye(4);
+            end
+            
+            ret = Transformation.builder(mat);
         end
     end
 end
